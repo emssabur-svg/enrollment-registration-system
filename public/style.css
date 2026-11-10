@@ -1,0 +1,623 @@
+
+/* ==============================
+   GENERAL SETTINGS
+============================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: #f4f7fc;
+    color: #26344a;
+}
+
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+
+/* ==============================
+   SIDEBAR
+============================== */
+
+.sidebar {
+    width: 255px;
+    background: #142b4a;
+    color: white;
+    padding: 28px 18px;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 8px;
+    margin-bottom: 55px;
+}
+
+.logo-icon {
+    width: 43px;
+    height: 43px;
+    background: #3b82f6;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 23px;
+    font-weight: 800;
+}
+
+.logo h2 {
+    font-size: 19px;
+    margin-bottom: 4px;
+}
+
+.logo p {
+    color: #a9bad0;
+    font-size: 11px;
+}
+
+.menu-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #91a4bd;
+    letter-spacing: 1.3px;
+    margin: 0 12px 16px;
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 14px 13px;
+    border-radius: 9px;
+    text-decoration: none;
+    color: #c5d1e0;
+    font-size: 13px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.menu-item span {
+    font-size: 19px;
+}
+
+.menu-item:hover,
+.menu-item.active {
+    background: #2f69b4;
+    color: white;
+}
+
+.sidebar-footer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-top: 1px solid #31455f;
+    padding: 22px 8px 0;
+    margin-top: auto;
+}
+
+.admin-avatar {
+    width: 39px;
+    height: 39px;
+    background: #3b82f6;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+.sidebar-footer h4 {
+    font-size: 12px;
+}
+
+.sidebar-footer p {
+    color: #a9bad0;
+    font-size: 10px;
+    margin-top: 4px;
+}
+
+
+/* ==============================
+   MAIN CONTENT
+============================== */
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+    padding: 32px 38px;
+}
+
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 35px;
+    gap: 15px;
+}
+
+.top-header h1 {
+    font-size: 25px;
+    color: #172d4b;
+    margin-bottom: 8px;
+}
+
+.top-header p {
+    color: #8491a5;
+    font-size: 13px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #4b647f;
+    background: white;
+    padding: 11px 15px;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+}
+
+
+/* ==============================
+   DASHBOARD
+============================== */
+
+.dashboard-section {
+    margin-bottom: 30px;
+}
+
+.section-heading {
+    margin-bottom: 20px;
+}
+
+.section-heading h2,
+.card-heading h2 {
+    color: #203650;
+    font-size: 18px;
+    margin-bottom: 7px;
+}
+
+.section-heading p,
+.card-heading p {
+    color: #8995a8;
+    font-size: 12px;
+}
+
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 17px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 22px 17px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 3px 15px rgba(30, 55, 90, 0.04);
+    border: 1px solid #edf0f5;
+}
+
+.stat-icon {
+    width: 43px;
+    height: 43px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.blue {
+    background: #e7f0ff;
+    color: #3478dc;
+}
+
+.orange {
+    background: #fff2df;
+    color: #e99a26;
+}
+
+.green {
+    background: #e4f8ed;
+    color: #23a65b;
+}
+
+.red {
+    background: #ffe9e9;
+    color: #e34c4c;
+}
+
+.stat-card p {
+    color: #8793a6;
+    font-size: 11px;
+    margin-bottom: 8px;
+}
+
+.stat-card h2 {
+    color: #203650;
+    font-size: 24px;
+}
+
+
+/* ==============================
+   CONTENT CARDS
+============================== */
+
+.content-card {
+    background: white;
+    border-radius: 13px;
+    padding: 25px;
+    margin-bottom: 25px;
+    border: 1px solid #edf0f5;
+    box-shadow: 0 3px 15px rgba(30, 55, 90, 0.04);
+}
+
+.card-heading {
+    margin-bottom: 25px;
+}
+
+.records-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+
+/* ==============================
+   REGISTRATION FORM
+============================== */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.form-group label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #42536b;
+}
+
+.form-group input,
+.form-group select,
+.search-box input {
+    width: 100%;
+    height: 44px;
+    padding: 0 13px;
+    border: 1px solid #dfe5ee;
+    border-radius: 7px;
+    background: #fff;
+    color: #33445c;
+    font-family: inherit;
+    font-size: 12px;
+    outline: none;
+    transition: 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.search-box input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.10);
+}
+
+.form-group input::placeholder,
+.search-box input::placeholder {
+    color: #a5afbd;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.btn-primary,
+.btn-secondary {
+    border: none;
+    padding: 12px 19px;
+    border-radius: 7px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-primary {
+    background: #2869bd;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #1d539a;
+}
+
+.btn-secondary {
+    background: #edf1f7;
+    color: #52647b;
+}
+
+.btn-secondary:hover {
+    background: #dfe6f0;
+}
+
+
+/* ==============================
+   SEARCH BOX
+============================== */
+
+.search-box {
+    width: 230px;
+}
+
+.search-box input {
+    background: #f8faff;
+}
+
+
+/* ==============================
+   STUDENT TABLE
+============================== */
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    min-width: 850px;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+thead {
+    background: #f4f7fc;
+}
+
+th {
+    padding: 15px 12px;
+    color: #6b7a90;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+td {
+    padding: 15px 12px;
+    border-bottom: 1px solid #edf0f5;
+    color: #526176;
+    font-size: 11px;
+}
+
+tbody tr:hover {
+    background: #f9fbff;
+}
+
+.empty-message {
+    text-align: center;
+    padding: 35px;
+    color: #98a3b2;
+}
+
+.footer {
+    text-align: center;
+    padding: 20px 0;
+    color: #9aa5b4;
+    font-size: 11px;
+}
+
+
+/* ==============================
+   RESPONSIVE DESIGN
+============================== */
+
+@media (max-width: 1100px) {
+
+    .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .main-content {
+        padding: 25px;
+    }
+}
+
+@media (max-width: 700px) {
+
+    .dashboard-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .logo {
+        margin-bottom: 20px;
+    }
+
+    .sidebar-menu {
+        gap: 5px;
+    }
+
+    .sidebar-footer {
+        display: none;
+    }
+
+    .main-content {
+        padding: 20px 14px;
+    }
+
+    .top-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .top-header h1 {
+        font-size: 21px;
+    }
+
+    .stats-container {
+        grid-template-columns: 1fr;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .content-card {
+        padding: 17px;
+    }
+
+    .records-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .search-box {
+        width: 100%;
+    }
+
+    .form-buttons {
+        flex-direction: column;
+    }
+
+    .form-buttons button {
+        width: 100%;
+    }
+}
+
+/* ==============================
+   STUDENT STATUS BADGES
+============================== */
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.status-badge.pending {
+    background: #fff2df;
+    color: #d88b18;
+}
+
+.status-badge.enrolled {
+    background: #e4f8ed;
+    color: #209b50;
+}
+
+.status-badge.rejected {
+    background: #ffe9e9;
+    color: #dc4444;
+}
+
+
+/* ==============================
+   ACTION BUTTONS
+============================== */
+
+.action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.edit-btn,
+.delete-btn {
+    border: none;
+    padding: 7px 10px;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.edit-btn {
+    background: #e7f0ff;
+    color: #2869bd;
+}
+
+.edit-btn:hover {
+    background: #d4e5ff;
+}
+
+.delete-btn {
+    background: #ffe9e9;
+    color: #d83f3f;
+}
+
+.delete-btn:hover {
+    background: #ffd5d5;
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.sidebar-footer {
+    padding: 20px;
+    margin-top: auto;
+}
+
+.logout-btn {
+    width: 100%;
+    padding: 12px;
+    background: #fee2e2;
+    color: #dc2626;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    background: #fecaca;
+}

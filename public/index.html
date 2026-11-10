@@ -1,0 +1,318 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Enrollment Registration System</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/style.css">
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <div class="logo">
+                <div class="logo-icon">E</div>
+                <div>
+                    <h2>EnrollSys</h2>
+                    <p>Registration Portal</p>
+                </div>
+            </div>
+
+            <div class="sidebar-menu">
+                <p class="menu-label">MAIN MENU</p>
+
+                <a href="#dashboard" class="menu-item active">
+                    <span>▦</span>
+                    Dashboard
+                </a>
+
+                <a href="#registration" class="menu-item">
+                    <span>＋</span>
+                    Student Registration
+                </a>
+
+                <a href="#records" class="menu-item">
+                    <span>▤</span>
+                    Student Records
+                </a>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="admin-avatar">A</div>
+                <div>
+                    <h4>Administrator</h4>
+                    <p>System Manager</p>
+
+<div class="sidebar-footer">
+    <button id="logoutBtn" class="logout-btn">
+        Logout
+    </button>
+</div>
+
+                </div>
+            </div>
+
+        </aside>
+
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- TOP HEADER -->
+            <header class="top-header">
+
+                <div>
+                    <h1>Enrollment Dashboard</h1>
+                    <p>Manage student registration and enrollment records.</p>
+                </div>
+
+                <div class="header-right">
+                    <span class="status-indicator"></span>
+                    <span>System Online</span>
+                </div>
+
+            </header>
+
+
+            <!-- DASHBOARD SECTION -->
+            <section id="dashboard" class="dashboard-section">
+
+                <div class="section-heading">
+                    <div>
+                        <h2>Overview</h2>
+                        <p>Student enrollment summary</p>
+                    </div>
+                </div>
+
+                <!-- STATISTICS -->
+                <div class="stats-container">
+
+                    <div class="stat-card">
+                        <div class="stat-icon blue">♙</div>
+                        <div>
+                            <p>Total Students</p>
+                            <h2 id="totalStudents">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon orange">◷</div>
+                        <div>
+                            <p>Pending Enrollment</p>
+                            <h2 id="pendingStudents">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon green">✓</div>
+                        <div>
+                            <p>Enrolled Students</p>
+                            <h2 id="enrolledStudents">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon red">✕</div>
+                        <div>
+                            <p>Rejected Applications</p>
+                            <h2 id="rejectedStudents">0</h2>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- REGISTRATION SECTION -->
+            <section id="registration" class="content-card">
+
+                <div class="card-heading">
+                    <div>
+                        <h2>Student Registration</h2>
+                        <p>Enter the student's information below.</p>
+                    </div>
+                </div>
+
+                <form id="studentForm">
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label for="studentId">Student ID</label>
+                            <input
+                                type="text"
+                                id="studentId"
+                                placeholder="Enter student ID"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fullName">Full Name</label>
+                            <input
+                                type="text"
+                                id="fullName"
+                                placeholder="Enter full name"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input
+                                type="email"
+                                id="email"
+                                placeholder="Enter email address"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="course">Course</label>
+                            <select id="course" required>
+                                <option value="">Select course</option>
+                                <option value="BSIT">BS Information Technology</option>
+                                <option value="BSCS">BS Computer Science</option>
+                                <option value="BSBA">BS Business Administration</option>
+                                <option value="BSED">BS Secondary Education</option>
+                                <option value="BEED">BS Elementary Education</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="yearLevel">Year Level</label>
+                            <select id="yearLevel" required>
+                                <option value="">Select year level</option>
+                                <option value="1st Year">1st Year</option>
+                                <option value="2nd Year">2nd Year</option>
+                                <option value="3rd Year">3rd Year</option>
+                                <option value="4th Year">4th Year</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="schoolYear">School Year</label>
+                            <input
+                                type="text"
+                                id="schoolYear"
+                                placeholder="Example: 2026-2027"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="enrollmentStatus">Enrollment Status</label>
+                            <select id="enrollmentStatus" required>
+                                <option value="Pending">Pending</option>
+                                <option value="Enrolled">Enrolled</option>
+                                <option value="Rejected">Rejected</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="form-buttons">
+
+                        <button type="submit" id="submitBtn" class="btn-primary">
+                            + Register Student
+                        </button>
+
+                        <button type="reset" id="resetBtn" class="btn-secondary">
+                            Clear Form
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+
+            <!-- STUDENT RECORDS SECTION -->
+            <section id="records" class="content-card">
+
+                <div class="card-heading records-heading">
+
+                    <div>
+                        <h2>Student Records</h2>
+                        <p>View and manage registered students.</p>
+                    </div>
+
+                    <div class="search-box">
+                        <input
+                            type="text"
+                            id="searchInput"
+                            placeholder="Search student..."
+                        >
+                    </div>
+
+                </div>
+
+
+                <!-- STUDENT TABLE -->
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Student ID</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Course</th>
+                                <th>Year Level</th>
+                                <th>School Year</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="studentTableBody">
+
+                            <tr>
+                                <td colspan="8" class="empty-message">
+                                    Loading student records...
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- FOOTER -->
+            <footer class="footer">
+                <p>
+                    © 2026 Enrollment Registration System.
+                    All Rights Reserved.
+                </p>
+            </footer>
+
+        </main>
+
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+    <script src="/assets/script.js"></script>
+
+</body>
+</html>
