@@ -13,7 +13,6 @@ const requireAuth = require('./middleware/authMiddleware');
 
 const app = express();
 
-// Check required environment variables
 if (!process.env.MONGODB_URI ||
     !process.env.SESSION_SECRET ||
     !process.env.ADMIN_USERNAME ||
@@ -21,16 +20,13 @@ if (!process.env.MONGODB_URI ||
     throw new Error('Please check your .env file. Required settings are missing.');
 }
 
-// Trust Render's proxy when deployed
 if (process.env.NODE_ENV === 'production') {
     app.set('trust proxy', 1);
 }
 
-// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve frontend files from the assets folder
 app.get('/assets/:filename', (req, res) => {
     const allowedFiles = [
         'style.css',
@@ -48,7 +44,6 @@ app.get('/assets/:filename', (req, res) => {
     );
 });
 
-// Login sessions stored in MongoDB
 app.use(session({
     name: 'connect.sid',
     secret: process.env.SESSION_SECRET,
@@ -67,22 +62,18 @@ app.use(session({
     }
 }));
 
-// Login and logout routes
 const authRoutes = require('./routes/authRoutes');
 app.use('/api/auth', authRoutes);
 
-// Check server status
 app.get('/api/health', (req, res) => {
     res.json({
         message: 'Enrollment System API is running!'
     });
 });
 
-// Protect student records
 const studentRoutes = require('./routes/studentRoutes');
 app.use('/api/students', requireAuth, studentRoutes);
 
-// Show login page or dashboard
 app.get('/', (req, res) => {
     if (req.session.adminId) {
         return res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -91,7 +82,6 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
-// Start server and create admin account
 async function startServer() {
     try {
         await mongoose.connect(process.env.MONGODB_URI);

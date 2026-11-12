@@ -1,8 +1,3 @@
-
-/* ==============================
-   GENERAL SETTINGS
-============================== */
-
 * {
     margin: 0;
     padding: 0;
@@ -23,12 +18,6 @@ body {
     display: flex;
     min-height: 100vh;
 }
-
-
-/* ==============================
-   SIDEBAR
-============================== */
-
 .sidebar {
     width: 255px;
     background: #142b4a;
@@ -136,11 +125,6 @@ body {
     margin-top: 4px;
 }
 
-
-/* ==============================
-   MAIN CONTENT
-============================== */
-
 .main-content {
     flex: 1;
     min-width: 0;
@@ -184,11 +168,6 @@ body {
     background: #22c55e;
     border-radius: 50%;
 }
-
-
-/* ==============================
-   DASHBOARD
-============================== */
 
 .dashboard-section {
     margin-bottom: 30px;
@@ -270,11 +249,6 @@ body {
     font-size: 24px;
 }
 
-
-/* ==============================
-   CONTENT CARDS
-============================== */
-
 .content-card {
     background: white;
     border-radius: 13px;
@@ -294,11 +268,6 @@ body {
     align-items: center;
     gap: 15px;
 }
-
-
-/* ==============================
-   REGISTRATION FORM
-============================== */
 
 .form-grid {
     display: grid;
@@ -382,11 +351,6 @@ body {
     background: #dfe6f0;
 }
 
-
-/* ==============================
-   SEARCH BOX
-============================== */
-
 .search-box {
     width: 230px;
 }
@@ -394,11 +358,6 @@ body {
 .search-box input {
     background: #f8faff;
 }
-
-
-/* ==============================
-   STUDENT TABLE
-============================== */
 
 .table-container {
     width: 100%;
@@ -447,11 +406,6 @@ tbody tr:hover {
     color: #9aa5b4;
     font-size: 11px;
 }
-
-
-/* ==============================
-   RESPONSIVE DESIGN
-============================== */
 
 @media (max-width: 1100px) {
 
@@ -530,10 +484,6 @@ tbody tr:hover {
     }
 }
 
-/* ==============================
-   STUDENT STATUS BADGES
-============================== */
-
 .status-badge {
     display: inline-block;
     padding: 6px 10px;
@@ -558,10 +508,6 @@ tbody tr:hover {
     color: #dc4444;
 }
 
-
-/* ==============================
-   ACTION BUTTONS
-============================== */
 
 .action-buttons {
     display: flex;

@@ -5,7 +5,6 @@ const Admin = require('../models/admin');
 
 const router = express.Router();
 
-// ADMIN LOGIN
 router.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -64,7 +63,6 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// CHECK LOGIN STATUS
 router.get('/me', (req, res) => {
     if (req.session && req.session.adminId) {
         return res.json({
@@ -78,7 +76,6 @@ router.get('/me', (req, res) => {
     });
 });
 
-// ADMIN LOGOUT
 router.post('/logout', (req, res) => {
     req.session.destroy((error) => {
         if (error) {

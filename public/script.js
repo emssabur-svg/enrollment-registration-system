@@ -1,13 +1,6 @@
 
-// ==========================================
-// ENROLLMENT REGISTRATION SYSTEM
-// Frontend JavaScript
-// ==========================================
-
-// API URL
 const API_URL = '/api/students';
 
-// HTML Elements
 const studentForm = document.getElementById('studentForm');
 const studentTableBody = document.getElementById('studentTableBody');
 const searchInput = document.getElementById('searchInput');
@@ -20,16 +13,9 @@ const rejectedStudents = document.getElementById('rejectedStudents');
 const submitBtn = document.getElementById('submitBtn');
 const resetBtn = document.getElementById('resetBtn');
 
-// Store student records
 let students = [];
 
-// Store ID of student being edited
 let editingStudentId = null;
-
-
-// ==========================================
-// 1. LOAD STUDENT RECORDS
-// ==========================================
 
 async function loadStudents() {
     try {
@@ -57,11 +43,6 @@ async function loadStudents() {
         `;
     }
 }
-
-
-// ==========================================
-// 2. DISPLAY STUDENT RECORDS
-// ==========================================
 
 function escapeHTML(value) {
     return String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -129,11 +110,6 @@ function displayStudents(studentList) {
     }).join('');
 }
 
-
-// ==========================================
-// 3. REGISTER OR UPDATE STUDENT
-// ==========================================
-
 studentForm.addEventListener('submit', async function(event) {
 
     event.preventDefault();
@@ -148,7 +124,6 @@ studentForm.addEventListener('submit', async function(event) {
         enrollmentStatus: document.getElementById('enrollmentStatus').value
     };
 
-    // Basic validation
     if (Object.values(studentData).some(value => !value)) {
         alert('Please complete all required fields.');
         return;
@@ -162,7 +137,6 @@ studentForm.addEventListener('submit', async function(event) {
 
         if (editingStudentId) {
 
-            // UPDATE STUDENT
             response = await fetch(
                 `${API_URL}/${encodeURIComponent(editingStudentId)}`,
                 {
@@ -176,7 +150,6 @@ studentForm.addEventListener('submit', async function(event) {
 
         } else {
 
-            // CREATE STUDENT
             response = await fetch(API_URL, {
                 method: 'POST',
                 headers: {
@@ -199,12 +172,10 @@ studentForm.addEventListener('submit', async function(event) {
             alert('Student successfully registered!');
         }
 
-        // Reset form and edit mode
         studentForm.reset();
         editingStudentId = null;
         submitBtn.textContent = '+ Register Student';
 
-        // Refresh records
         await loadStudents();
 
     } catch (error) {
@@ -220,11 +191,6 @@ studentForm.addEventListener('submit', async function(event) {
 
 });
 
-
-// ==========================================
-// 4. EDIT STUDENT
-// ==========================================
-
 async function editStudent(id) {
 
     try {
@@ -239,7 +205,6 @@ async function editStudent(id) {
             throw new Error(student.message || 'Student not found.');
         }
 
-        // Fill registration form
         document.getElementById('studentId').value = student.studentId;
         document.getElementById('fullName').value = student.fullName;
         document.getElementById('email').value = student.email;
@@ -249,12 +214,10 @@ async function editStudent(id) {
         document.getElementById('enrollmentStatus').value =
             student.enrollmentStatus;
 
-        // Set edit mode
         editingStudentId = student._id;
 
         submitBtn.textContent = 'Update Student';
 
-        // Scroll to registration form
         document.getElementById('registration').scrollIntoView({
             behavior: 'smooth'
         });
@@ -266,11 +229,6 @@ async function editStudent(id) {
 
     }
 }
-
-
-// ==========================================
-// 5. DELETE STUDENT
-// ==========================================
 
 async function deleteStudent(id) {
 
@@ -299,14 +257,12 @@ async function deleteStudent(id) {
 
         alert('Student record successfully deleted!');
 
-        // Clear form if deleted student was being edited
         if (editingStudentId === id) {
             studentForm.reset();
             editingStudentId = null;
             submitBtn.textContent = '+ Register Student';
         }
 
-        // Refresh records
         await loadStudents();
 
     } catch (error) {
@@ -316,11 +272,6 @@ async function deleteStudent(id) {
 
     }
 }
-
-
-// ==========================================
-// 6. SEARCH STUDENTS
-// ==========================================
 
 searchInput.addEventListener('input', function() {
 
@@ -341,11 +292,6 @@ searchInput.addEventListener('input', function() {
     displayStudents(filteredStudents);
 
 });
-
-
-// ==========================================
-// 7. UPDATE DASHBOARD STATISTICS
-// ==========================================
 
 function updateDashboard() {
 
@@ -370,11 +316,6 @@ function updateDashboard() {
 
 }
 
-
-// ==========================================
-// 8. HANDLE TABLE ACTION BUTTONS
-// ==========================================
-
 studentTableBody.addEventListener('click', function(event) {
 
     const editButton = event.target.closest('.edit-btn');
@@ -390,11 +331,6 @@ studentTableBody.addEventListener('click', function(event) {
 
 });
 
-
-// ==========================================
-// 9. RESET REGISTRATION FORM
-// ==========================================
-
 studentForm.addEventListener('reset', function() {
 
     editingStudentId = null;
@@ -404,10 +340,6 @@ studentForm.addEventListener('reset', function() {
 });
 
 
-// ==========================================
-// 10. INITIALIZE SYSTEM
-// ==========================================
-
 document.addEventListener('DOMContentLoaded', function() {
 
     loadStudents();
@@ -416,7 +348,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
-// ADMIN LOGOUT
 const logoutBtn = document.getElementById('logoutBtn');
 
 if (logoutBtn) {

@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 const Student = require('../models/Student');
 
-// CREATE - Add a student
 router.post('/', async (req, res) => {
     try {
         const student = new Student(req.body);
@@ -26,7 +25,6 @@ router.post('/', async (req, res) => {
     }
 });
 
-// READ - Display all students
 router.get('/', async (req, res) => {
     try {
         const students = await Student.find().sort({
@@ -41,7 +39,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-// READ - Display one student
 router.get('/:id', async (req, res) => {
     try {
         const student = await Student.findById(req.params.id);
@@ -60,7 +57,6 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// UPDATE - Edit student information
 router.put('/:id', async (req, res) => {
     try {
         const student = await Student.findByIdAndUpdate(
@@ -95,7 +91,6 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-// DELETE - Remove a student
 router.delete('/:id', async (req, res) => {
     try {
         const student = await Student.findByIdAndDelete(
