@@ -29,7 +29,7 @@ if (process.env.NODE_ENV === 'production') {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Allow frontend CSS and JavaScript files
+
 app.get('/assets/:filename', (req, res) => {
     const allowedFiles = [
         'style.css',
@@ -49,7 +49,7 @@ app.get('/assets/:filename', (req, res) => {
     );
 });
 
-// Session configuration
+
 app.use(session({
     name: 'connect.sid',
     secret: process.env.SESSION_SECRET,
@@ -68,26 +68,26 @@ app.use(session({
     }
 }));
 
-// Authentication routes
+
 const authRoutes = require('./routes/authRoutes');
 app.use('/api/auth', authRoutes);
 
-// Health check
+
 app.get('/api/health', (req, res) => {
     res.json({
         message: 'Enrollment System API is running!'
     });
 });
 
-// Existing student routes
+
 const studentRoutes = require('./routes/studentRoutes');
 app.use('/api/students', requireAuth, studentRoutes);
 
-// NEW: Enrollment routes
+
 const enrollmentRoutes = require('./routes/enrollmentRoutes');
 app.use('/api/enrollments', enrollmentRoutes);
 
-// Admin dashboard
+
 app.get('/', (req, res) => {
     if (req.session.adminId) {
         return res.sendFile(
@@ -100,14 +100,14 @@ app.get('/', (req, res) => {
     );
 });
 
-// NEW: Student enrollment page
+
 app.get('/apply', (req, res) => {
     res.sendFile(
         path.join(__dirname, 'public', 'apply.html')
     );
 });
 
-// Start server
+
 async function startServer() {
     try {
         await mongoose.connect(process.env.MONGODB_URI);
@@ -122,7 +122,7 @@ async function startServer() {
         await Admin.updateOne(
             { username: process.env.ADMIN_USERNAME },
             {
-                $setOnInsert: {
+                $set: {
                     username: process.env.ADMIN_USERNAME,
                     passwordHash: passwordHash
                 }
