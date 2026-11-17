@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
     try {
         const students = await Student.find().sort({
-            createdAt: -1
+            fullName: 1
         });
 
         res.json(students);

@@ -1,3 +1,4 @@
+
 window.addEventListener('load', function () {
     window.scrollTo(0, 0);
 
@@ -5,6 +6,7 @@ window.addEventListener('load', function () {
         element.scrollTop = 0;
     });
 });
+
 const API_URL = '/api/students';
 
 const studentForm = document.getElementById('studentForm');
@@ -69,6 +71,45 @@ function escapeHTML(value) {
     })[character]);
 }
 
+function parseStudentName(fullName) {
+    const parts = String(fullName || '')
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean);
+
+    if (parts.length === 0) {
+        return {
+            firstName: '',
+            middleName: '',
+            lastName: ''
+        };
+    }
+
+    if (parts.length === 1) {
+        return {
+            firstName: parts[0],
+            middleName: '',
+            lastName: ''
+        };
+    }
+
+    return {
+        firstName: parts[0],
+        middleName: parts.slice(1, -1).join(' '),
+        lastName: parts[parts.length - 1]
+    };
+}
+
+function formatStudentName(fullName) {
+    const name = parseStudentName(fullName);
+
+    return [
+        name.lastName,
+        name.firstName,
+        name.middleName
+    ].filter(Boolean).join(', ');
+}
+
 function displayStudents(studentList) {
     if (!studentTableBody) return;
 
@@ -83,14 +124,24 @@ function displayStudents(studentList) {
         return;
     }
 
-    studentTableBody.innerHTML = studentList.map(student => {
+    const sortedStudents = [...studentList].sort((a, b) => {
+        const nameA = parseStudentName(a.fullName);
+        const nameB = parseStudentName(b.fullName);
 
+        return nameA.lastName.localeCompare(
+            nameB.lastName,
+            undefined,
+            { sensitivity: 'base' }
+        );
+    });
+
+    studentTableBody.innerHTML = sortedStudents.map(student => {
         const status = student.enrollmentStatus || 'Pending';
 
         return `
             <tr>
                 <td>${escapeHTML(student.studentId)}</td>
-                <td>${escapeHTML(student.fullName)}</td>
+                <td>${escapeHTML(formatStudentName(student.fullName))}</td>
                 <td>${escapeHTML(student.email)}</td>
                 <td>${escapeHTML(student.course)}</td>
                 <td>${escapeHTML(student.yearLevel)}</td>
@@ -123,7 +174,7 @@ function openStudentDetails(id) {
 
     const details = {
         detailStudentId: student.studentId,
-        detailFullName: student.fullName,
+        detailFullName: formatStudentName(student.fullName),
         detailBirthDate: student.birthDate
             ? new Date(student.birthDate).toLocaleDateString()
             : '',
@@ -354,6 +405,7 @@ if (searchInput) {
         const filteredStudents = students.filter(student => (
             String(student.studentId || '').toLowerCase().includes(searchValue) ||
             String(student.fullName || '').toLowerCase().includes(searchValue) ||
+            formatStudentName(student.fullName).toLowerCase().includes(searchValue) ||
             String(student.email || '').toLowerCase().includes(searchValue) ||
             String(student.course || '').toLowerCase().includes(searchValue) ||
             String(student.yearLevel || '').toLowerCase().includes(searchValue)
