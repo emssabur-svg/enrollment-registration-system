@@ -1,4 +1,10 @@
+window.addEventListener('load', function () {
+    window.scrollTo(0, 0);
 
+    document.querySelectorAll('.main-content').forEach(element => {
+        element.scrollTop = 0;
+    });
+});
 const API_URL = '/api/students';
 
 const studentForm = document.getElementById('studentForm');
