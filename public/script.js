@@ -19,7 +19,14 @@ let editingStudentId = null;
 
 async function loadStudents() {
     try {
-        const response = await fetch(API_URL);
+        const response = await fetch(API_URL, {
+            credentials: 'same-origin'
+        });
+
+        if (response.status === 401 || response.status === 403) {
+            window.location.replace('/');
+            return;
+        }
 
         if (!response.ok) {
             throw new Error('Failed to load student records.');
@@ -33,14 +40,16 @@ async function loadStudents() {
     } catch (error) {
         console.error('Error loading students:', error);
 
-        studentTableBody.innerHTML = `
-            <tr>
-                <td colspan="8" class="empty-message">
-                    Unable to load student records.
-                    Please check your server connection.
-                </td>
-            </tr>
-        `;
+        if (studentTableBody) {
+            studentTableBody.innerHTML = `
+                <tr>
+                    <td colspan="8" class="empty-message">
+                        Unable to load student records.
+                        Please check your server connection.
+                    </td>
+                </tr>
+            `;
+        }
     }
 }
 
@@ -55,7 +64,8 @@ function escapeHTML(value) {
 }
 
 function displayStudents(studentList) {
- 
+    if (!studentTableBody) return;
+
     if (studentList.length === 0) {
         studentTableBody.innerHTML = `
             <tr>
@@ -68,7 +78,7 @@ function displayStudents(studentList) {
     }
 
     studentTableBody.innerHTML = studentList.map(student => {
- 
+
         const status = student.enrollmentStatus || 'Pending';
 
         return `
@@ -79,25 +89,17 @@ function displayStudents(studentList) {
                 <td>${escapeHTML(student.course)}</td>
                 <td>${escapeHTML(student.yearLevel)}</td>
                 <td>${escapeHTML(student.schoolYear)}</td>
- 
+
                 <td>
                     <span class="status-badge ${escapeHTML(status.toLowerCase())}">
                         ${escapeHTML(status)}
                     </span>
- 
-                    </td>
+                </td>
                 <td>
                     <div class="action-buttons">
-                        <button class="view-btn" data-id="${escapeHTML(student._id)}" type="button">
-                            View
-                        </button>
-                        <button class="edit-btn" data-id="${escapeHTML(student._id)}" type="button">
-                            Edit
-                        </button>
-                        <button class="delete-btn" data-id="${escapeHTML(student._id)}" type="button">
-                            Delete
- 
-                            </button>
+                        <button class="view-btn" data-id="${escapeHTML(student._id)}" type="button">View</button>
+                        <button class="edit-btn" data-id="${escapeHTML(student._id)}" type="button">Edit</button>
+                        <button class="delete-btn" data-id="${escapeHTML(student._id)}" type="button">Delete</button>
                     </div>
                 </td>
             </tr>
@@ -137,31 +139,40 @@ function openStudentDetails(id) {
         }
     });
 
-    document.getElementById('studentDetailsModal').style.display = 'flex';
+    const modal = document.getElementById('studentDetailsModal');
+
+    if (modal) {
+        modal.style.display = 'flex';
+    }
 }
 
 function closeStudentDetails() {
-    document.getElementById('studentDetailsModal').style.display = 'none';
+    const modal = document.getElementById('studentDetailsModal');
+
+    if (modal) {
+        modal.style.display = 'none';
+    }
 }
 
-document.getElementById('closeStudentDetails').addEventListener(
-    'click',
-    closeStudentDetails
-);
+const closeDetailsButton = document.getElementById('closeStudentDetails');
+const closeDetailsBtn = document.getElementById('closeStudentDetailsBtn');
+const studentDetailsModal = document.getElementById('studentDetailsModal');
 
-document.getElementById('closeStudentDetailsBtn').addEventListener(
-    'click',
-    closeStudentDetails
-);
+if (closeDetailsButton) {
+    closeDetailsButton.addEventListener('click', closeStudentDetails);
+}
 
-document.getElementById('studentDetailsModal').addEventListener(
-    'click',
-    function(event) {
+if (closeDetailsBtn) {
+    closeDetailsBtn.addEventListener('click', closeStudentDetails);
+}
+
+if (studentDetailsModal) {
+    studentDetailsModal.addEventListener('click', function(event) {
         if (event.target === this) {
             closeStudentDetails();
         }
-    }
-);
+    });
+}
 
 function getStudentFormData() {
     return {
@@ -179,81 +190,84 @@ function getStudentFormData() {
     };
 }
 
-studentForm.addEventListener('submit', async function(event) {
-    event.preventDefault();
+if (studentForm) {
+    studentForm.addEventListener('submit', async function(event) {
+        event.preventDefault();
 
-    const studentData = getStudentFormData();
+        const studentData = getStudentFormData();
 
-    if (
-        !studentData.studentId ||
-        !studentData.fullName ||
-        !studentData.email ||
-        !studentData.course ||
-        !studentData.yearLevel ||
-        !studentData.schoolYear ||
-        !studentData.enrollmentStatus
-    ) {
-        alert('Please complete all required fields.');
-        return;
-    }
-
-    try {
-        
-        submitBtn.disabled = true;
-
-        const response = await fetch(
-            editingStudentId
-                ? `${API_URL}/${encodeURIComponent(editingStudentId)}`
-                : API_URL,
-            {
-                method: editingStudentId ? 'PUT' : 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(studentData)
-            }
-        );
-
-
-
-        const result = await response.json();
-
-        if (!response.ok) {
-            throw new Error(result.message || 'Something went wrong.');
+        if (
+            !studentData.studentId ||
+            !studentData.fullName ||
+            !studentData.email ||
+            !studentData.course ||
+            !studentData.yearLevel ||
+            !studentData.schoolYear ||
+            !studentData.enrollmentStatus
+        ) {
+            alert('Please complete all required fields.');
+            return;
         }
 
-        alert(
-            editingStudentId
-                ? 'Student information successfully updated!'
-                : 'Student successfully registered!'
-        );
+        try {
+            submitBtn.disabled = true;
 
-        studentForm.reset();
+            const response = await fetch(
+                editingStudentId
+                    ? `${API_URL}/${encodeURIComponent(editingStudentId)}`
+                    : API_URL,
+                {
+                    method: editingStudentId ? 'PUT' : 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify(studentData)
+                }
+            );
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || 'Something went wrong.');
+            }
+
+            alert(
+                editingStudentId
+                    ? 'Student information successfully updated!'
+                    : 'Student successfully registered!'
+            );
+
+            studentForm.reset();
+            editingStudentId = null;
+            submitBtn.textContent = '+ Register Student';
+
+            await loadStudents();
+
+        } catch (error) {
+            alert(error.message);
+            console.error('Student form error:', error);
+
+        } finally {
+            submitBtn.disabled = false;
+        }
+    });
+
+    studentForm.addEventListener('reset', function() {
         editingStudentId = null;
-        submitBtn.textContent = '+ Register Student';
 
-        await loadStudents();
-
-    } catch (error) {
-
-        alert(error.message);
-        console.error('Student form error:', error);
-
-    } finally {
-
-        submitBtn.disabled = false;
-
-    }
-
-});
+        if (submitBtn) {
+            submitBtn.textContent = '+ Register Student';
+        }
+    });
+}
 
 async function editStudent(id) {
 
     try {
-
-        const response = await fetch(
-            `${API_URL}/${encodeURIComponent(id)}`
-        );
+        const response = await fetch(`${API_URL}/${encodeURIComponent(id)}`, {
+            credentials: 'same-origin'
+        });
 
         const student = await response.json();
 
@@ -275,8 +289,7 @@ async function editStudent(id) {
         document.getElementById('course').value = student.course || '';
         document.getElementById('yearLevel').value = student.yearLevel || '';
         document.getElementById('schoolYear').value = student.schoolYear || '';
-        document.getElementById('enrollmentStatus').value =
-            student.enrollmentStatus || 'Pending';
+        document.getElementById('enrollmentStatus').value = student.enrollmentStatus || 'Pending';
 
         editingStudentId = student._id;
 
@@ -295,21 +308,15 @@ async function editStudent(id) {
 }
 
 async function deleteStudent(id) {
-
-    const confirmDelete = confirm(
-        'Are you sure you want to delete this student record?'
-    );
+    const confirmDelete = confirm('Are you sure you want to delete this student record?');
 
     if (!confirmDelete) return;
 
     try {
-
-        const response = await fetch(
-            `${API_URL}/${encodeURIComponent(id)}`,
-            {
-                method: 'DELETE'
-            }
-        );
+        const response = await fetch(`${API_URL}/${encodeURIComponent(id)}`, {
+            method: 'DELETE',
+            credentials: 'same-origin'
+        });
 
         const result = await response.json();
 
@@ -319,7 +326,7 @@ async function deleteStudent(id) {
 
         alert('Student record successfully deleted!');
 
-        if (editingStudentId === id) {
+        if (editingStudentId === id && studentForm) {
             studentForm.reset();
 
         }
@@ -334,140 +341,142 @@ async function deleteStudent(id) {
     }
 }
 
-searchInput.addEventListener('input', function() {
+if (searchInput) {
+    searchInput.addEventListener('input', function() {
+        const searchValue = this.value.toLowerCase().trim();
 
-    const searchValue = this.value.toLowerCase().trim();
-
-    const filteredStudents = students.filter(student => {
-
-        return (
+        const filteredStudents = students.filter(student => (
             String(student.studentId || '').toLowerCase().includes(searchValue) ||
             String(student.fullName || '').toLowerCase().includes(searchValue) ||
             String(student.email || '').toLowerCase().includes(searchValue) ||
             String(student.course || '').toLowerCase().includes(searchValue) ||
             String(student.yearLevel || '').toLowerCase().includes(searchValue)
-        );
+        ));
 
+        displayStudents(filteredStudents);
     });
-
-    displayStudents(filteredStudents);
-
-});
-
-function updateDashboard() {
-    totalStudents.textContent = students.length;
-
-    pendingStudents.textContent = students.filter(student =>
-        student.enrollmentStatus === 'Pending'
-    ).length;
-
-    enrolledStudents.textContent = students.filter(student =>
-        student.enrollmentStatus === 'Enrolled'
-    ).length;
-
-    rejectedStudents.textContent = students.filter(student =>
-        student.enrollmentStatus === 'Rejected'
-    ).length;
-
-
 }
 
-studentTableBody.addEventListener('click', function(event) {
-    const viewButton = event.target.closest('.view-btn');
-    const editButton = event.target.closest('.edit-btn');
-    const deleteButton = event.target.closest('.delete-btn');
-
-    if (viewButton) {
-        openStudentDetails(viewButton.dataset.id);
+function updateDashboard() {
+    if (totalStudents) {
+        totalStudents.textContent = students.length;
     }
 
-    if (editButton) {
-        editStudent(editButton.dataset.id);
+    if (pendingStudents) {
+        pendingStudents.textContent = students.filter(student =>
+            student.enrollmentStatus === 'Pending'
+        ).length;
     }
 
-    if (deleteButton) {
-        deleteStudent(deleteButton.dataset.id);
+    if (enrolledStudents) {
+        enrolledStudents.textContent = students.filter(student =>
+            student.enrollmentStatus === 'Enrolled'
+        ).length;
     }
 
-});
+    if (rejectedStudents) {
+        rejectedStudents.textContent = students.filter(student =>
+            student.enrollmentStatus === 'Rejected'
+        ).length;
+    }
+}
 
-studentForm.addEventListener('reset', function() {
+if (studentTableBody) {
+    studentTableBody.addEventListener('click', function(event) {
+        const viewButton = event.target.closest('.view-btn');
+        const editButton = event.target.closest('.edit-btn');
+        const deleteButton = event.target.closest('.delete-btn');
 
-    editingStudentId = null;
+        if (viewButton) openStudentDetails(viewButton.dataset.id);
+        if (editButton) editStudent(editButton.dataset.id);
+        if (deleteButton) deleteStudent(deleteButton.dataset.id);
+    });
+}
 
-    submitBtn.textContent = '+ Register Student';
+async function logout() {
+    const confirmed = confirm('Are you sure you want to logout?');
 
-});
+    if (!confirmed) return;
 
+    const logoutBtn = document.getElementById('logoutBtn');
 
-document.addEventListener('DOMContentLoaded', function() {
-    
-    loadStudents();
-    
-    console.log('Enrollment Registration System initialized!');
+    try {
+        if (logoutBtn) {
+            logoutBtn.disabled = true;
+        }
 
-});
+        const response = await fetch('/api/auth/logout', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(result.message || 'Unable to logout.');
+        }
+
+        window.location.replace('/');
+
+    } catch (error) {
+        console.error('Logout error:', error);
+        alert(error.message || 'Unable to logout. Please try again.');
+
+        if (logoutBtn) {
+            logoutBtn.disabled = false;
+        }
+    }
+}
 
 const logoutBtn = document.getElementById('logoutBtn');
 
 if (logoutBtn) {
-    logoutBtn.addEventListener('click', async () => {
-        const confirmed = confirm('Are you sure you want to logout?');
-
-        if (!confirmed) return;
-
-        try {
-            const response = await fetch('/api/auth/logout', {
-                method: 'POST'
-            });
-
-            if (!response.ok) {
-                throw new Error('Unable to logout.');
-            }
-
-            window.location.replace('/');
-
-        } catch (error) {
-            alert(error.message);
-        }
+    logoutBtn.addEventListener('click', function(event) {
+        event.preventDefault();
+        logout();
     });
 }
 
 (() => {
-    const applicationTableBody =
-        document.getElementById('applicationTableBody');
-
-    const refreshApplications =
-        document.getElementById('refreshApplications');
-
-    const applicationSearch =
-        document.getElementById('applicationSearch');
-
-    const courseFilter =
-        document.getElementById('courseFilter');
-
-    const statusFilter =
-        document.getElementById('statusFilter');
-
-    const resetApplicationFilters =
-        document.getElementById('resetApplicationFilters');
+    const applicationTableBody = document.getElementById('applicationTableBody');
+    const refreshApplications = document.getElementById('refreshApplications');
+    const applicationSearch = document.getElementById('applicationSearch');
+    const courseFilter = document.getElementById('courseFilter');
+    const statusFilter = document.getElementById('statusFilter');
+    const resetApplicationFilters = document.getElementById('resetApplicationFilters');
 
     if (!applicationTableBody) return;
 
     let allApplications = [];
 
     function updateEnrollmentStatistics(applications) {
-        document.getElementById('totalApplications').textContent =
-            applications.length;
+        const total = document.getElementById('totalApplications');
+        const pending = document.getElementById('pendingApplications');
+        const enrolled = document.getElementById('enrolledApplications');
+        const rejected = document.getElementById('rejectedApplications');
 
-        document.getElementById('pendingApplications').textContent =
-            applications.filter(app => app.enrollmentStatus === 'Pending').length;
+        if (total) total.textContent = applications.length;
 
-        document.getElementById('enrolledApplications').textContent =
-            applications.filter(app => app.enrollmentStatus === 'Enrolled').length;
+        if (pending) {
+            pending.textContent = applications.filter(app =>
+                app.enrollmentStatus === 'Pending'
+            ).length;
+        }
 
-        document.getElementById('rejectedApplications').textContent =
-            applications.filter(app => app.enrollmentStatus === 'Rejected').length;
+        if (enrolled) {
+            enrolled.textContent = applications.filter(app =>
+                app.enrollmentStatus === 'Enrolled'
+            ).length;
+        }
+
+        if (rejected) {
+            rejected.textContent = applications.filter(app =>
+                app.enrollmentStatus === 'Rejected'
+            ).length;
+        }
     }
 
     async function loadApplications() {
@@ -478,10 +487,12 @@ if (logoutBtn) {
         `;
 
         try {
-            const response = await fetch('/api/enrollments');
+            const response = await fetch('/api/enrollments', {
+                credentials: 'same-origin'
+            });
 
             if (response.status === 401 || response.status === 403) {
-                window.location.href = '/';
+                window.location.replace('/');
                 return;
             }
 
@@ -508,9 +519,12 @@ if (logoutBtn) {
     }
 
     function filterApplications() {
-        const searchValue = applicationSearch.value.toLowerCase().trim();
-        const selectedCourse = courseFilter.value;
-        const selectedStatus = statusFilter.value;
+        const searchValue = applicationSearch
+            ? applicationSearch.value.toLowerCase().trim()
+            : '';
+
+        const selectedCourse = courseFilter ? courseFilter.value : '';
+        const selectedStatus = statusFilter ? statusFilter.value : '';
 
         const courseNames = {
             BSIT: 'BS Information Technology',
@@ -527,19 +541,11 @@ if (logoutBtn) {
                 application.lastName
             ].filter(Boolean).join(' ');
 
-            const applicationNumber =
-                String(application.applicationNumber || '').toLowerCase();
-
+            const applicationNumber = String(application.applicationNumber || '').toLowerCase();
             const applicantName = fullName.toLowerCase();
-
-            const applicantEmail =
-                String(application.email || '').toLowerCase();
-
-            const course =
-                String(application.course || '').toLowerCase();
-
-            const yearLevel =
-                String(application.yearLevel || '').toLowerCase();
+            const applicantEmail = String(application.email || '').toLowerCase();
+            const yearLevel = String(application.yearLevel || '').toLowerCase();
+            const course = String(application.course || '').toLowerCase();
 
             const matchesSearch =
                 applicationNumber.includes(searchValue) ||
@@ -547,8 +553,9 @@ if (logoutBtn) {
                 applicantEmail.includes(searchValue) ||
                 yearLevel.includes(searchValue);
 
-            const selectedCourseName =
-                String(courseNames[selectedCourse] || '').toLowerCase();
+            const selectedCourseName = String(
+                courseNames[selectedCourse] || ''
+            ).toLowerCase();
 
             const matchesCourse =
                 !selectedCourse ||
@@ -670,6 +677,7 @@ if (logoutBtn) {
                     headers: {
                         'Content-Type': 'application/json'
                     },
+                    credentials: 'same-origin',
                     body: JSON.stringify({
                         enrollmentStatus: status
                     })
@@ -679,9 +687,7 @@ if (logoutBtn) {
             const result = await response.json();
 
             if (!response.ok) {
-                throw new Error(
-                    result.message || 'Unable to update application.'
-                );
+                throw new Error(result.message || 'Unable to update application.');
             }
 
             alert(result.message || 'Enrollment status updated successfully!');
@@ -717,9 +723,9 @@ if (logoutBtn) {
 
     if (resetApplicationFilters) {
         resetApplicationFilters.addEventListener('click', () => {
-            applicationSearch.value = '';
-            courseFilter.value = '';
-            statusFilter.value = '';
+            if (applicationSearch) applicationSearch.value = '';
+            if (courseFilter) courseFilter.value = '';
+            if (statusFilter) statusFilter.value = '';
 
             filterApplications();
         });
@@ -728,3 +734,8 @@ if (logoutBtn) {
     loadApplications();
 
 })();
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadStudents();
+    console.log('Enrollment Registration System initialized!');
+});

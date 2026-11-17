@@ -9,6 +9,7 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
     try {
+        console.log('ENROLLMENT SUBMISSION RECEIVED:');
         const {
             firstName,
             lastName,

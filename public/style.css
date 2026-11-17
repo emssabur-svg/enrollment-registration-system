@@ -18,16 +18,23 @@ body {
 .dashboard-container {
     display: flex;
     min-height: 100vh;
+    width: 100%;
 }
 
 .sidebar {
     width: 255px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
     background: #142b4a;
     color: white;
     padding: 28px 18px;
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
+    overflow-y: auto;
+    box-sizing: border-box;
 }
 
 .logo {
@@ -99,38 +106,69 @@ body {
 
 .sidebar-footer {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: stretch;
     gap: 12px;
-    border-top: 1px solid #31455f;
-    padding: 22px 8px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 20px 8px 0;
     margin-top: auto;
 }
 
+.admin-profile {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 8px 10px 10px;
+}
+
 .admin-avatar {
-    width: 39px;
-    height: 39px;
-    background: #3b82f6;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
     border-radius: 50%;
+    background: #3985f6;
+    color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
+    font-size: 20px;
+    font-weight: 600;
 }
 
-.sidebar-footer h4 {
-    font-size: 12px;
+.admin-info h4 {
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 5px;
 }
 
-.sidebar-footer p {
-    color: #a9bad0;
-    font-size: 10px;
-    margin-top: 4px;
+.admin-info p {
+    color: #a9c0df;
+    font-size: 13px;
+    margin: 0;
+}
+
+.logout-btn {
+    width: 100%;
+    padding: 12px;
+    background: #fee2e2;
+    color: #dc2626;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    background: #fecaca;
 }
 
 .main-content {
-    flex: 1;
-    min-width: 0;
-    padding: 32px 38px;
+    margin-left: 255px;
+    width: calc(100% - 255px);
+    min-height: 100vh;
+    padding: 30px;
+    box-sizing: border-box;
 }
 
 .top-header {
@@ -482,20 +520,7 @@ tbody tr:hover {
     cursor: not-allowed;
 }
 
-.logout-btn {
-    width: 100%;
-    padding: 12px;
-    background: #fee2e2;
-    color: #dc2626;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-}
 
-.logout-btn:hover {
-    background: #fecaca;
-}
 
 .application-status-select {
     padding: 8px;
@@ -546,7 +571,7 @@ tbody tr:hover {
     outline: none;
 }
 
-/* Student Details Modal */
+
 
 .modal-overlay {
     position: fixed;
@@ -662,7 +687,7 @@ tbody tr:hover {
 }
 
 @media (max-width: 1100px) {
-    
+
     .stats-container {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -680,6 +705,9 @@ tbody tr:hover {
 
     .sidebar {
         width: 100%;
+        height: auto;
+        min-height: auto;
+        position: relative;
         padding: 15px;
     }
 
