@@ -45,6 +45,11 @@
                     <span>▤</span>
                     Student Records
                 </a>
+
+                <a href="#applications" class="menu-item">
+                    <span>▣</span>
+                    Enrollment Applications
+                </a>
             </div>
 
             <div class="sidebar-footer">
@@ -52,14 +57,13 @@
                 <div>
                     <h4>Administrator</h4>
                     <p>System Manager</p>
-
-<div class="sidebar-footer">
-    <button id="logoutBtn" class="logout-btn">
-        Logout
-    </button>
-</div>
-
                 </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <button id="logoutBtn" class="logout-btn">
+                    Logout
+                </button>
             </div>
 
         </aside>
@@ -125,15 +129,60 @@
                     </div>
 
                 </div>
-
             </section>
-1   
+
+            <section id="applicationStatistics" class="dashboard-section">
+
+                <div class="section-heading">
+                    <div>
+                        <h2>Application Statistics</h2>
+                        <p>Summary of submitted enrollment applications</p>
+                    </div>
+                </div>
+
+                <div class="stats-container">
+
+                    <div class="stat-card">
+                        <div class="stat-icon blue">▤</div>
+                        <div>
+                            <p>Total Applications</p>
+                            <h2 id="totalApplications">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon orange">◷</div>
+                        <div>
+                            <p>Pending Applications</p>
+                            <h2 id="pendingApplications">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon green">✓</div>
+                        <div>
+                            <p>Enrolled Applications</p>
+                            <h2 id="enrolledApplications">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon red">✕</div>
+                        <div>
+                            <p>Rejected Applications</p>
+                            <h2 id="rejectedApplications">0</h2>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
             <section id="registration" class="content-card">
 
                 <div class="card-heading">
                     <div>
                         <h2>Student Registration</h2>
-                        <p>Enter the student's information below.</p>
+                        <p>Enter the student's complete information below.</p>
                     </div>
                 </div>
 
@@ -143,32 +192,42 @@
 
                         <div class="form-group">
                             <label for="studentId">Student ID</label>
-                            <input
-                                type="text"
-                                id="studentId"
-                                placeholder="Enter student ID"
-                                required
-                            >
+                            <input type="text" id="studentId" placeholder="Enter student ID" required>
                         </div>
 
                         <div class="form-group">
                             <label for="fullName">Full Name</label>
-                            <input
-                                type="text"
-                                id="fullName"
-                                placeholder="Enter full name"
-                                required
-                            >
+                            <input type="text" id="fullName" placeholder="Enter full name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="birthDate">Birth Date</label>
+                            <input type="date" id="birthDate">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="gender">Gender</label>
+                            <select id="gender">
+                                <option value="">Select gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Prefer not to say">Prefer not to say</option>
+                            </select>
                         </div>
 
                         <div class="form-group">
                             <label for="email">Email Address</label>
-                            <input
-                                type="email"
-                                id="email"
-                                placeholder="Enter email address"
-                                required
-                            >
+                            <input type="email" id="email" placeholder="Enter email address" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contactNumber">Contact Number</label>
+                            <input type="tel" id="contactNumber" placeholder="Enter contact number">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address">Complete Address</label>
+                            <input type="text" id="address" placeholder="Enter complete address">
                         </div>
 
                         <div class="form-group">
@@ -196,12 +255,7 @@
 
                         <div class="form-group">
                             <label for="schoolYear">School Year</label>
-                            <input
-                                type="text"
-                                id="schoolYear"
-                                placeholder="Example: 2026-2027"
-                                required
-                            >
+                            <input type="text" id="schoolYear" placeholder="Example: 2026-2027" required>
                         </div>
 
                         <div class="form-group">
@@ -241,11 +295,7 @@
                     </div>
 
                     <div class="search-box">
-                        <input
-                            type="text"
-                            id="searchInput"
-                            placeholder="Search student..."
-                        >
+                        <input type="text" id="searchInput" placeholder="Search student...">
                     </div>
 
                 </div>
@@ -278,10 +328,159 @@
                         </tbody>
 
                     </table>
+                </div>
+            </section>
+
+            <section id="applications" class="content-card">
+
+                <div class="card-heading records-heading">
+                    <div>
+                        <h2>Enrollment Applications</h2>
+                        <p>Review and manage student enrollment applications.</p>
+                    </div>
+
+                    <button type="button" id="refreshApplications" class="btn-primary">
+                        Refresh Applications
+                    </button>
+                </div>
+
+                <div class="application-filters">
+
+                    <div class="search-box">
+                        <input type="text" id="applicationSearch" placeholder="Search applicant name or application number...">
+                    </div>
+
+                    <select id="courseFilter">
+                        <option value="">All Courses</option>
+                        <option value="BSIT">BS Information Technology</option>
+                        <option value="BSCS">BS Computer Science</option>
+                        <option value="BSBA">BS Business Administration</option>
+                        <option value="BSED">BS Secondary Education</option>
+                        <option value="BEED">BS Elementary Education</option>
+                    </select>
+
+                    <select id="statusFilter">
+                        <option value="">All Statuses</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Enrolled">Enrolled</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+
+                    <button type="button" id="resetApplicationFilters" class="btn-secondary">
+                        Reset Filters
+                    </button>
 
                 </div>
 
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Application No.</th>
+                                <th>Student Name</th>
+                                <th>Email</th>
+                                <th>Course</th>
+                                <th>Year Level</th>
+                                <th>School Year</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="applicationTableBody">
+                            <tr>
+                                <td colspan="8" class="empty-message">
+                                    Loading applications...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
             </section>
+
+            <div id="studentDetailsModal" class="modal-overlay" style="display: none;">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <div>
+                            <h2>Student Details</h2>
+                            <p>Complete student information</p>
+                        </div>
+
+                        <button type="button" id="closeStudentDetails" class="modal-close">
+                            ×
+                        </button>
+                    </div>
+
+                    <div class="student-details-grid">
+
+                        <div class="detail-item">
+                            <label>Student ID</label>
+                            <p id="detailStudentId">-</p>
+                        </div>
+
+                        <div class="detail-item">
+                            <label>Full Name</label>
+                            <p id="detailFullName">-</p>
+                        </div>
+
+                        <div class="detail-item">
+                            <label>Birth Date</label>
+                            <p id="detailBirthDate">-</p>
+                        </div>
+
+                        <div class="detail-item">
+                            <label>Gender</label>
+                            <p id="detailGender">-</p>
+                        </div>
+
+                        <div class="detail-item">
+                            <label>Email Address</label>
+                            <p id="detailEmail">-</p>
+                        </div>
+
+                        <div class="detail-item">
+                            <label>Contact Number</label>
+                            <p id="detailContactNumber">-</p>
+                        </div>
+
+                        <div class="detail-item full-width">
+                            <label>Complete Address</label>
+                            <p id="detailAddress">-</p>
+                        </div>
+
+                        <div class="detail-item">
+                            <label>Course</label>
+                            <p id="detailCourse">-</p>
+                        </div>
+
+                        <div class="detail-item">
+                            <label>Year Level</label>
+                            <p id="detailYearLevel">-</p>
+                        </div>
+
+                        <div class="detail-item">
+                            <label>School Year</label>
+                            <p id="detailSchoolYear">-</p>
+                        </div>
+
+                        <div class="detail-item">
+                            <label>Enrollment Status</label>
+                            <p id="detailEnrollmentStatus">-</p>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" id="closeStudentDetailsBtn" class="btn-secondary">
+                            Close
+                        </button>
+                    </div>
+
+                </div>
+            </div>
 
             <footer class="footer">
                 <p>

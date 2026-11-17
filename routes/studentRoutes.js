@@ -59,9 +59,31 @@ router.get('/:id', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
     try {
+        const allowedFields = [
+            'studentId',
+            'fullName',
+            'birthDate',
+            'gender',
+            'address',
+            'contactNumber',
+            'email',
+            'course',
+            'yearLevel',
+            'schoolYear',
+            'enrollmentStatus'
+        ];
+
+        const updates = {};
+
+        allowedFields.forEach(field => {
+            if (req.body[field] !== undefined) {
+                updates[field] = req.body[field];
+            }
+        });
+
         const student = await Student.findByIdAndUpdate(
             req.params.id,
-            req.body,
+            { $set: updates },
             {
                 new: true,
                 runValidators: true
@@ -75,7 +97,7 @@ router.put('/:id', async (req, res) => {
         }
 
         res.json({
-            message: 'Student information updated!',
+            message: 'Student information updated successfully!',
             student
         });
     } catch (error) {

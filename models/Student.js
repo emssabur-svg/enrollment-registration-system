@@ -15,6 +15,28 @@ const studentSchema = new mongoose.Schema({
         trim: true
     },
 
+    birthDate: {
+        type: Date,
+        default: null
+    },
+
+    gender: {
+        type: String,
+        default: ''
+    },
+
+    address: {
+        type: String,
+        default: '',
+        trim: true
+    },
+
+    contactNumber: {
+        type: String,
+        default: '',
+        trim: true
+    },
+
     email: {
         type: String,
         required: true,
@@ -41,6 +63,13 @@ const studentSchema = new mongoose.Schema({
         type: String,
         enum: ['Pending', 'Enrolled', 'Rejected'],
         default: 'Pending'
+    },
+
+    enrollmentApplication: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Enrollment',
+        unique: true,
+        sparse: true
     }
 
 }, {

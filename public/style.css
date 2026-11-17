@@ -1,3 +1,4 @@
+
 * {
     margin: 0;
     padding: 0;
@@ -18,6 +19,7 @@ body {
     display: flex;
     min-height: 100vh;
 }
+
 .sidebar {
     width: 255px;
     background: #142b4a;
@@ -407,8 +409,260 @@ tbody tr:hover {
     font-size: 11px;
 }
 
-@media (max-width: 1100px) {
+.status-badge {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+}
 
+.status-badge.pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-badge.enrolled {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-badge.rejected {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.view-btn,
+.edit-btn,
+.delete-btn {
+    border: none;
+    padding: 7px 10px;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.view-btn {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+.view-btn:hover {
+    background: #bae6fd;
+}
+
+.edit-btn {
+    background: #e7f0ff;
+    color: #2869bd;
+}
+
+.edit-btn:hover {
+    background: #d4e5ff;
+}
+
+.delete-btn {
+    background: #ffe9e9;
+    color: #d83f3f;
+}
+
+.delete-btn:hover {
+    background: #ffd5d5;
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.logout-btn {
+    width: 100%;
+    padding: 12px;
+    background: #fee2e2;
+    color: #dc2626;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    background: #fecaca;
+}
+
+.application-status-select {
+    padding: 8px;
+    border: 1px solid #cbd5e1;
+    border-radius: 5px;
+    margin-right: 5px;
+    background: white;
+}
+
+#applications .table-container {
+    overflow-x: auto;
+}
+
+#applications table {
+    min-width: 900px;
+}
+
+#applications .edit-btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    background: #2563eb;
+    color: white;
+    cursor: pointer;
+}
+
+#applications .edit-btn:hover {
+    background: #1d4ed8;
+}
+
+.application-filters {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.application-filters select {
+    height: 44px;
+    padding: 0 12px;
+    border: 1px solid #dfe5ee;
+    border-radius: 7px;
+    background: white;
+    color: #526176;
+    font-family: inherit;
+    font-size: 12px;
+    outline: none;
+}
+
+/* Student Details Modal */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(15, 30, 50, 0.65);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 750px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: white;
+    border-radius: 15px;
+    padding: 28px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+    animation: modalAppear 0.25s ease;
+}
+
+@keyframes modalAppear {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid #edf0f5;
+    padding-bottom: 20px;
+    margin-bottom: 25px;
+}
+
+.modal-header h2 {
+    color: #203650;
+    font-size: 20px;
+    margin-bottom: 7px;
+}
+
+.modal-header p {
+    color: #8995a8;
+    font-size: 12px;
+}
+
+.modal-close {
+    width: 35px;
+    height: 35px;
+    border: none;
+    border-radius: 8px;
+    background: #fee2e2;
+    color: #dc2626;
+    font-size: 23px;
+    cursor: pointer;
+}
+
+.modal-close:hover {
+    background: #fecaca;
+}
+
+.student-details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.detail-item {
+    background: #f7f9fc;
+    border: 1px solid #edf0f5;
+    border-radius: 9px;
+    padding: 15px;
+    min-width: 0;
+}
+
+.detail-item label {
+    display: block;
+    color: #8995a8;
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 9px;
+}
+
+.detail-item p {
+    color: #263d5a;
+    font-size: 13px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+    line-height: 1.5;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #edf0f5;
+}
+
+@media (max-width: 1100px) {
+    
     .stats-container {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -482,88 +736,26 @@ tbody tr:hover {
     .form-buttons button {
         width: 100%;
     }
-}
 
-.status-badge {
-    display: inline-block;
-    padding: 6px 10px;
-    border-radius: 20px;
-    font-size: 10px;
-    font-weight: 700;
-    white-space: nowrap;
-}
+    .application-filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
 
-.status-badge.pending {
-    background: #fff2df;
-    color: #d88b18;
-}
+    .application-filters select,
+    .application-filters button {
+        width: 100%;
+    }
 
-.status-badge.enrolled {
-    background: #e4f8ed;
-    color: #209b50;
-}
+    .modal-content {
+        padding: 20px;
+    }
 
-.status-badge.rejected {
-    background: #ffe9e9;
-    color: #dc4444;
-}
+    .student-details-grid {
+        grid-template-columns: 1fr;
+    }
 
-
-.action-buttons {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-}
-
-.edit-btn,
-.delete-btn {
-    border: none;
-    padding: 7px 10px;
-    border-radius: 5px;
-    font-size: 10px;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-.edit-btn {
-    background: #e7f0ff;
-    color: #2869bd;
-}
-
-.edit-btn:hover {
-    background: #d4e5ff;
-}
-
-.delete-btn {
-    background: #ffe9e9;
-    color: #d83f3f;
-}
-
-.delete-btn:hover {
-    background: #ffd5d5;
-}
-
-.btn-primary:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.sidebar-footer {
-    padding: 20px;
-    margin-top: auto;
-}
-
-.logout-btn {
-    width: 100%;
-    padding: 12px;
-    background: #fee2e2;
-    color: #dc2626;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.logout-btn:hover {
-    background: #fecaca;
+    .full-width {
+        grid-column: auto;
+    }
 }
