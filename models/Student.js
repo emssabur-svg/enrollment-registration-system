@@ -59,6 +59,13 @@ const studentSchema = new mongoose.Schema({
         required: true
     },
 
+    gwa: {
+        type: Number,
+        required: true,
+        min: 0,
+        max: 100
+    },
+
     enrollmentStatus: {
         type: String,
         enum: ['Pending', 'Enrolled', 'Rejected'],

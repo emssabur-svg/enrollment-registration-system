@@ -51,7 +51,7 @@ async function loadStudents() {
         if (studentTableBody) {
             studentTableBody.innerHTML = `
                 <tr>
-                    <td colspan="8" class="empty-message">
+                    <td colspan="9" class="empty-message">
                         Unable to load student records.
                         Please check your server connection.
                     </td>
@@ -69,6 +69,14 @@ function escapeHTML(value) {
         '"': '&quot;',
         "'": '&#39;'
     })[character]);
+}
+
+function formatGWA(gwa) {
+    if (gwa === undefined || gwa === null || gwa === '') {
+        return 'Not provided';
+    }
+
+    return Number(gwa).toFixed(2);
 }
 
 function parseStudentName(fullName) {
@@ -116,7 +124,7 @@ function displayStudents(studentList) {
     if (studentList.length === 0) {
         studentTableBody.innerHTML = `
             <tr>
-                <td colspan="8" class="empty-message">
+                <td colspan="9" class="empty-message">
                     No student records found.
                 </td>
             </tr>
@@ -146,7 +154,7 @@ function displayStudents(studentList) {
                 <td>${escapeHTML(student.course)}</td>
                 <td>${escapeHTML(student.yearLevel)}</td>
                 <td>${escapeHTML(student.schoolYear)}</td>
-
+                <td>${escapeHTML(formatGWA(student.gwa))}</td>
                 <td>
                     <span class="status-badge ${escapeHTML(status.toLowerCase())}">
                         ${escapeHTML(status)}
@@ -185,6 +193,7 @@ function openStudentDetails(id) {
         detailCourse: student.course,
         detailYearLevel: student.yearLevel,
         detailSchoolYear: student.schoolYear,
+        detailGWA: formatGWA(student.gwa),
         detailEnrollmentStatus: student.enrollmentStatus
     };
 
@@ -243,6 +252,7 @@ function getStudentFormData() {
         course: document.getElementById('course').value,
         yearLevel: document.getElementById('yearLevel').value,
         schoolYear: document.getElementById('schoolYear').value.trim(),
+        gwa: document.getElementById('gwa')?.value || '',
         enrollmentStatus: document.getElementById('enrollmentStatus').value
     };
 }
@@ -264,6 +274,22 @@ if (studentForm) {
         ) {
             alert('Please complete all required fields.');
             return;
+        }
+
+        if (
+            studentData.gwa !== '' &&
+            (
+                !Number.isFinite(Number(studentData.gwa)) ||
+                Number(studentData.gwa) < 0 ||
+                Number(studentData.gwa) > 100
+            )
+        ) {
+            alert('GWA must be between 0 and 100.');
+            return;
+        }
+
+        if (studentData.gwa !== '') {
+            studentData.gwa = Number(studentData.gwa);
         }
 
         try {
@@ -346,6 +372,13 @@ async function editStudent(id) {
         document.getElementById('course').value = student.course || '';
         document.getElementById('yearLevel').value = student.yearLevel || '';
         document.getElementById('schoolYear').value = student.schoolYear || '';
+
+        const gwaInput = document.getElementById('gwa');
+
+        if (gwaInput) {
+            gwaInput.value = student.gwa ?? '';
+        }
+
         document.getElementById('enrollmentStatus').value = student.enrollmentStatus || 'Pending';
 
         editingStudentId = student._id;
@@ -540,7 +573,7 @@ if (logoutBtn) {
     async function loadApplications() {
         applicationTableBody.innerHTML = `
             <tr>
-                <td colspan="8">Loading applications...</td>
+                <td colspan="9">Loading applications...</td>
             </tr>
         `;
 
@@ -568,7 +601,7 @@ if (logoutBtn) {
 
             applicationTableBody.innerHTML = `
                 <tr>
-                    <td colspan="8">
+                    <td colspan="9">
                         Failed to load applications. Please refresh.
                     </td>
                 </tr>
@@ -637,7 +670,7 @@ if (logoutBtn) {
             const row = document.createElement('tr');
             const cell = document.createElement('td');
 
-            cell.colSpan = 8;
+            cell.colSpan = 9;
             cell.className = 'empty-message';
             cell.textContent = 'No enrollment applications found.';
 
@@ -662,7 +695,8 @@ if (logoutBtn) {
                 application.email,
                 application.course,
                 application.yearLevel,
-                application.schoolYear
+                application.schoolYear,
+                formatGWA(application.gwa)
             ];
 
             values.forEach(value => {

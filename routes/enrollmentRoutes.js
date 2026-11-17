@@ -10,6 +10,7 @@ const router = express.Router();
 router.post('/', async (req, res) => {
     try {
         console.log('ENROLLMENT SUBMISSION RECEIVED:');
+
         const {
             firstName,
             lastName,
@@ -21,17 +22,32 @@ router.post('/', async (req, res) => {
             email,
             course,
             yearLevel,
-            schoolYear
+            schoolYear,
+            gwa
         } = req.body;
+
+        const gwaValue = Number(gwa);
 
         if (
             !firstName || !lastName || !birthDate ||
             !gender || !address || !contactNumber ||
-            !email || !course || !yearLevel || !schoolYear
+            !email || !course || !yearLevel || !schoolYear ||
+            gwa === undefined || gwa === null || gwa === ''
         ) {
             return res.status(400).json({
                 success: false,
                 message: 'Please complete all required fields.'
+            });
+        }
+
+        if (
+            !Number.isFinite(gwaValue) ||
+            gwaValue < 0 ||
+            gwaValue > 100
+        ) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please enter a valid GWA between 0 and 100.'
             });
         }
 
@@ -52,6 +68,7 @@ router.post('/', async (req, res) => {
             course,
             yearLevel,
             schoolYear,
+            gwa: gwaValue,
             enrollmentStatus: 'Pending'
         });
 
@@ -131,6 +148,7 @@ router.patch('/:id/status', requireAuth, async (req, res) => {
                         course: application.course,
                         yearLevel: application.yearLevel,
                         schoolYear: application.schoolYear,
+                        gwa: application.gwa,
                         enrollmentStatus: 'Enrolled'
                     }
                 },
@@ -146,7 +164,7 @@ router.patch('/:id/status', requireAuth, async (req, res) => {
 
             return res.json({
                 success: true,
-                message: 'Student successfully enrolled! The student record, including personal information, has been saved and the enrollment application has been permanently deleted.',
+                message: 'Student successfully enrolled! The student record, including GWA, has been saved and the enrollment application has been permanently deleted.',
                 student
             });
         }
