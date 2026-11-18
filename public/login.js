@@ -3,7 +3,7 @@ const loginForm = document.getElementById('loginForm');
 const errorMessage = document.getElementById('errorMessage');
 const loginBtn = document.getElementById('loginBtn');
 
-// Check if admin is already logged in
+
 async function checkLogin() {
     try {
         const response = await fetch('/api/auth/me');
@@ -19,7 +19,7 @@ async function checkLogin() {
 
 checkLogin();
 
-// Handle login
+
 loginForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
